@@ -117,64 +117,76 @@ const [gameOver, setGameOver] = useState(false);
 const [isBorn, setIsBorn] = useState(false); // Флаг "Рождения" (игрок еще не родился)
 const [birthAttempts, setBirthAttempts] = useState(0); // Количество попыток выбросить 6
 const [request, setRequest] = useState(""); // Запрос игрока (можно добавить поле ввода)
+// Состояние для анимации кубика
+const [isRolling, setIsRolling] = useState(false); // Флаг анимации
 
-  // Функция броска кубика с учетом правил "Рождения" и завершения игры
+// Функция броска кубика с анимацией
 const rollDice = () => {
   if (gameOver) return;
 
-  const dice = Math.floor(Math.random() * 6) + 1;
-  setDiceValue(dice);
+  // Запускаем анимацию кубика
+  setIsRolling(true);
 
-  // Если игрок еще не родился (на клетке 68), нужно выбросить 6
-  if (!isBorn) {
-    setBirthAttempts(birthAttempts + 1);
-    if (dice !== 6) {
-      // Не выбросили 6, остаемся на клетке 68
-      setMoveHistory([...moveHistory, { cellId: 68, cellName: "Космическое сознание (ожидание рождения)" }]);
+  // Имитация задержки для анимации (например, 1 секунда)
+  setTimeout(() => {
+    const dice = Math.floor(Math.random() * 6) + 1;
+    setDiceValue(dice);
+
+    // Если игрок еще не родился (на клетке 68), нужно выбросить 6
+    if (!isBorn) {
+      setBirthAttempts(birthAttempts + 1);
+      if (dice !== 6) {
+        // Не выбросили 6, остаемся на клетке 68
+        setMoveHistory([...moveHistory, { cellId: 68, cellName: "Космическое сознание (ожидание рождения)" }]);
+        setIsRolling(false); // Останавливаем анимацию
+        return;
+      }
+      // Выбросили 6, "Рождение" произошло, перемещаемся на клетку 1, затем на 6
+      setIsBorn(true);
+      setCurrentPosition(1);
+      const birthCell = cells.find((cell) => cell.id === 1) || cells[0];
+      setCurrentCell(birthCell);
+      setMoveHistory([...moveHistory, { cellId: 1, cellName: birthCell.name }]);
+      // Сразу перемещаемся на клетку 6 (Иллюзия)
+      setTimeout(() => {
+        setCurrentPosition(6);
+        const illusionCell = cells.find((cell) => cell.id === 6) || cells[0];
+        setCurrentCell(illusionCell);
+        setMoveHistory((prev) => [...prev, { cellId: 6, cellName: illusionCell.name }]);
+        setIsRolling(false); // Останавливаем анимацию после перехода
+      }, 500);
       return;
     }
-    // Выбросили 6, "Рождение" произошло, перемещаемся на клетку 1, затем на 6
-    setIsBorn(true);
-    setCurrentPosition(1);
-    const birthCell = cells.find((cell) => cell.id === 1) || cells[0];
-    setCurrentCell(birthCell);
-    setMoveHistory([...moveHistory, { cellId: 1, cellName: birthCell.name }]);
-    // Сразу перемещаемся на клетку 6 (Иллюзия)
-    setTimeout(() => {
-      setCurrentPosition(6);
-      const illusionCell = cells.find((cell) => cell.id === 6) || cells[0];
-      setCurrentCell(illusionCell);
-      setMoveHistory((prev) => [...prev, { cellId: 6, cellName: illusionCell.name }]);
-    }, 500); // Задержка для отображения перехода
-    return;
-  }
 
-  // Игрок уже родился, обычный ход
-  let newPosition = currentPosition + dice;
-  // Проверяем, не превышает ли позиция 72
-  if (newPosition > 72) {
-    // Если выпало больше, чем нужно для достижения 68, игрок остается на месте
-    if (currentPosition < 68 && newPosition > 68) {
-      newPosition = currentPosition; // Остаемся на месте, если пропустили 68
-    } else if (newPosition > 72) {
-      newPosition = currentPosition; // Остаемся на месте, если больше 72
+    // Игрок уже родился, обычный ход
+    let newPosition = currentPosition + dice;
+    // Проверяем, не превышает ли позиция 72
+    if (newPosition > 72) {
+      // Если выпало больше, чем нужно для достижения 68, игрок остается на месте
+      if (currentPosition < 68 && newPosition > 68) {
+        newPosition = currentPosition; // Остаемся на месте, если пропустили 68
+      } else if (newPosition > 72) {
+        newPosition = currentPosition; // Остаемся на месте, если больше 72
+      }
     }
-  }
 
-  // Проверяем переходы (змеи и стрелы)
-  if (transitions[newPosition]) {
-    newPosition = transitions[newPosition];
-  }
+    // Проверяем переходы (змеи и стрелы)
+    if (transitions[newPosition]) {
+      newPosition = transitions[newPosition];
+    }
 
-  setCurrentPosition(newPosition);
-  const newCell = cells.find((cell) => cell.id === newPosition) || cells[0];
-  setCurrentCell(newCell);
-  setMoveHistory([...moveHistory, { cellId: newCell.id, cellName: newCell.name }]);
+    setCurrentPosition(newPosition);
+    const newCell = cells.find((cell) => cell.id === newPosition) || cells[0];
+    setCurrentCell(newCell);
+    setMoveHistory([...moveHistory, { cellId: newCell.id, cellName: newCell.name }]);
 
-  // Проверяем завершение игры
-  if (newPosition === 68) {
-    setGameOver(true);
-  }
+    // Проверяем завершение игры
+    if (newPosition === 68) {
+      setGameOver(true);
+    }
+
+    setIsRolling(false); // Останавливаем анимацию после хода
+  }, 1000); // Задержка 1 секунда для анимации
 };
 
 // Стили для сетки 9x8 (9 столбцов, 8 рядов), размер клеток 100x100px
@@ -284,13 +296,27 @@ const cellStyles: React.CSSProperties = {
         <p className="text-md">{currentCell.description}</p>
         <p className="text-md">Практика: {currentCell.practice}</p>
       </div>
-      <div className="mt-4">
-        <Button onClick={rollDice} disabled={gameOver}>Бросить кубик</Button>
-        {diceValue > 0 && <p className="mt-2">Выпало: {diceValue}</p>}
-        {gameOver && (
-          <p className="mt-4 text-green-500 font-semibold">Поздравляем! Вы достигли конца пути.</p>
-        )}
-      </div>
+      // Рендеринг кнопки и кубика с анимацией
+      <div className="mt-4 flex flex-col items-center">
+  <div
+    className={`dice ${isRolling ? 'rolling' : ''}`}
+    onClick={rollDice}
+    style={{
+      cursor: gameOver ? 'not-allowed' : 'pointer',
+      width: '100px',
+      height: '100px',
+      backgroundImage: `url("/images/dice/dice-${diceValue || 1}.png")`, // Изображение грани кубика
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      transition: 'transform 0.1s ease-in-out', // Плавный переход для анимации
+    }}
+    title={gameOver ? "Игра окончена" : "Бросить кубик"}
+  />
+  {diceValue > 0 && !isRolling && <p className="mt-2 text-lg">Выпало: {diceValue}</p>}
+  {gameOver && (
+    <p className="mt-4 text-green-500 font-semibold">Поздравляем! Вы достигли конца пути.</p>
+  )}
+</div>
       <div className="mt-8">
         <h2 className="text-2xl font-bold">История ходов</h2>
         <ul className="list-disc">

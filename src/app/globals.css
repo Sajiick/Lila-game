@@ -121,3 +121,31 @@ body {
     height: 10px;
   }
 }
+/* Стили для кубика */
+.dice {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out; /* Плавный переход для анимации */
+}
+
+/* Анимация вращения кубика */
+.dice.rolling {
+  animation: rollDice 0.1s infinite; /* Быстрое вращение для имитации броска */
+}
+
+@keyframes rollDice {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(90deg); }
+  50% { transform: rotate(180deg); }
+  75% { transform: rotate(270deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Отключение курсора для завершенной игры */
+.dice:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
