@@ -19,3 +19,99 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.game-board {
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+  max-width: 600px;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cell {
+  width: 100%;
+  padding-top: 100%; /* Для квадратных клеток */
+  position: relative;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.cell-number {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 0.6rem;
+  color: #333;
+}
+
+.cell-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  z-index: 10;
+}
+
+.player-icon {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.snake-icon {
+  bottom: 5px;
+  right: 5px;
+}
+
+.ladder-icon {
+  bottom: 5px;
+  left: 5px;
+}
+
+.special-icon {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .game-board {
+    max-width: 400px;
+  }
+
+  .cell {
+    font-size: 0.6rem;
+  }
+
+  .cell-icon {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-board {
+    max-width: 300px;
+  }
+
+  .cell {
+    font-size: 0.5rem;
+  }
+
+  .cell-icon {
+    width: 10px;
+    height: 10px;
+  }
+}
