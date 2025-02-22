@@ -39,56 +39,57 @@ body {
   justify-content: space-between;
 }
 
-.cell {
-  width: 100%;
-  padding-top: 100%; /* Для квадратных клеток */
-  position: relative;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 5px solid #999;
-  text-align: center;
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* Стили для анимации перемещения фигурки */
+.player-icon.moving {
+  transition: transform 0.5s ease-in-out; /* Плавный переход для анимации */
+  transform: translate(0, 0); /* Начальная позиция */
 }
 
+/* Убедитесь, что предыдущие стили для .cell и .cell-icon корректны */
+.cell {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  border: 1px solid #999;
+}
+
+/* Стили для числового обозначения клеток */
 .cell-number {
   position: absolute;
-  top: 5px;
-  left: 5px;
-  font-size: 0.6rem;
-  color: #333;
+  z-index: 1;
+  color: #333333; /* Темно-графитовый цвет для лучшей видимости */
 }
 
 .cell-icon {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  z-index: 10;
+  width: 40px;
+  height: 40px;
+  z-index: 2;
 }
 
-.player-icon {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.player {
+  background-color: #ffd700; /* Подсветка игрока */
 }
 
-.snake-icon {
-  bottom: 5px;
-  right: 5px;
+.snake {
+  background-color: rgba(255, 0, 0, 0.2); /* Подсветка змеи */
 }
 
-.ladder-icon {
-  bottom: 5px;
-  left: 5px;
+.ladder {
+  background-color: rgba(0, 255, 0, 0.2); /* Подсветка лестницы */
 }
 
-.special-icon {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.special {
+  background-color: rgba(0, 0, 255, 0.2); /* Подсветка особых клеток */
+}
+
+.player-icon, .snake-icon, .ladder-icon, .special-icon {
+  width: 40px;
+  height: 40px;
 }
 
 /* Адаптивность */

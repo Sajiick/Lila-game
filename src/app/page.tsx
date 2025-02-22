@@ -117,17 +117,21 @@ const [gameOver, setGameOver] = useState(false);
 const [isBorn, setIsBorn] = useState(false); // Флаг "Рождения" (игрок еще не родился)
 const [birthAttempts, setBirthAttempts] = useState(0); // Количество попыток выбросить 6
 const [request, setRequest] = useState(""); // Запрос игрока (можно добавить поле ввода)
+// Состояние для анимации перемещения фигурки
+const [playerPath, setPlayerPath] = useState<number[]>([68]); // Начальная позиция на клетке 68
+const [isMoving, setIsMoving] = useState(false); // Флаг анимации перемещения
 // Состояние для анимации кубика
 const [isRolling, setIsRolling] = useState(false); // Флаг анимации
 
 // Функция броска кубика с анимацией
+// Функция броска кубика с анимацией и плавным перемещением фигурки
 const rollDice = () => {
   if (gameOver) return;
 
   // Запускаем анимацию кубика
   setIsRolling(true);
 
-  // Имитация задержки для анимации (например, 1 секунда)
+  // Имитация задержки для анимации кубика (1 секунда)
   setTimeout(() => {
     const dice = Math.floor(Math.random() * 6) + 1;
     setDiceValue(dice);
@@ -138,23 +142,33 @@ const rollDice = () => {
       if (dice !== 6) {
         // Не выбросили 6, остаемся на клетке 68
         setMoveHistory([...moveHistory, { cellId: 68, cellName: "Космическое сознание (ожидание рождения)" }]);
-        setIsRolling(false); // Останавливаем анимацию
+        setIsRolling(false);
         return;
       }
       // Выбросили 6, "Рождение" произошло, перемещаемся на клетку 1, затем на 6
       setIsBorn(true);
-      setCurrentPosition(1);
-      const birthCell = cells.find((cell) => cell.id === 1) || cells[0];
-      setCurrentCell(birthCell);
-      setMoveHistory([...moveHistory, { cellId: 1, cellName: birthCell.name }]);
-      // Сразу перемещаемся на клетку 6 (Иллюзия)
+      setIsMoving(true); // Запускаем анимацию перемещения
+      setPlayerPath([68, 1]); // Путь от 68 к 1
       setTimeout(() => {
-        setCurrentPosition(6);
-        const illusionCell = cells.find((cell) => cell.id === 6) || cells[0];
-        setCurrentCell(illusionCell);
-        setMoveHistory((prev) => [...prev, { cellId: 6, cellName: illusionCell.name }]);
-        setIsRolling(false); // Останавливаем анимацию после перехода
-      }, 500);
+        setCurrentPosition(1);
+        const birthCell = cells.find((cell) => cell.id === 1) || cells[0];
+        setCurrentCell(birthCell);
+        setMoveHistory([...moveHistory, { cellId: 1, cellName: birthCell.name }]);
+        setIsMoving(false); // Останавливаем анимацию
+        // Сразу перемещаемся на клетку 6 (Иллюзия)
+        setTimeout(() => {
+          setIsMoving(true); // Запускаем анимацию для перехода на 6
+          setPlayerPath([1, 6]); // Путь от 1 к 6
+          setTimeout(() => {
+            setCurrentPosition(6);
+            const illusionCell = cells.find((cell) => cell.id === 6) || cells[0];
+            setCurrentCell(illusionCell);
+            setMoveHistory((prev) => [...prev, { cellId: 6, cellName: illusionCell.name }]);
+            setIsMoving(false); // Останавливаем анимацию
+            setIsRolling(false); // Останавливаем анимацию кубика
+          }, 500); // Задержка для анимации перехода на 6
+        }, 500); // Задержка для отображения клетки 1
+      }, 500); // Задержка для анимации перехода на 1
       return;
     }
 
@@ -162,7 +176,6 @@ const rollDice = () => {
     let newPosition = currentPosition + dice;
     // Проверяем, не превышает ли позиция 72
     if (newPosition > 72) {
-      // Если выпало больше, чем нужно для достижения 68, игрок остается на месте
       if (currentPosition < 68 && newPosition > 68) {
         newPosition = currentPosition; // Остаемся на месте, если пропустили 68
       } else if (newPosition > 72) {
@@ -171,22 +184,38 @@ const rollDice = () => {
     }
 
     // Проверяем переходы (змеи и стрелы)
+    const finalPosition = transitions[newPosition] || newPosition;
+
+    // Создаем путь для анимации (промежуточные клетки)
+    const path = [];
+    for (let i = currentPosition; i <= finalPosition; i++) {
+      path.push(i);
+    }
     if (transitions[newPosition]) {
-      newPosition = transitions[newPosition];
+      path.push(transitions[newPosition]); // Добавляем конечную клетку после перехода
     }
 
-    setCurrentPosition(newPosition);
-    const newCell = cells.find((cell) => cell.id === newPosition) || cells[0];
-    setCurrentCell(newCell);
-    setMoveHistory([...moveHistory, { cellId: newCell.id, cellName: newCell.name }]);
+    setIsMoving(true); // Запускаем анимацию перемещения
+    setPlayerPath(path); // Устанавливаем путь для анимации
 
-    // Проверяем завершение игры
-    if (newPosition === 68) {
-      setGameOver(true);
-    }
-
-    setIsRolling(false); // Останавливаем анимацию после хода
-  }, 1000); // Задержка 1 секунда для анимации
+    // Перемещаем фигурку по пути с задержкой
+    path.forEach((position, index) => {
+      setTimeout(() => {
+        setCurrentPosition(position);
+        const newCell = cells.find((cell) => cell.id === position) || cells[0];
+        setCurrentCell(newCell);
+        setMoveHistory((prev) => [...prev, { cellId: newCell.id, cellName: newCell.name }]);
+        if (index === path.length - 1) {
+          setIsMoving(false); // Останавливаем анимацию после завершения пути
+          setIsRolling(false); // Останавливаем анимацию кубика
+          // Проверяем завершение игры
+          if (position === 68) {
+            setGameOver(true);
+          }
+        }
+      }, index * 500); // Задержка 500ms между шагами
+    });
+  }, 1000); // Задержка для анимации кубика
 };
 
 // Стили для сетки 9x8 (9 столбцов, 8 рядов), размер клеток 100x100px
@@ -240,16 +269,16 @@ const cellStyles: React.CSSProperties = {
   )}
       <h1 className="text-4xl font-bold mb-8">Игра Лила</h1>
       // Рендеринг сетки 8x9 (72 клетки) с иконками, подсветкой текущей позиции и особыми клетками
-      // Рендеринг сетки 9x8 (72 клетки) с чередованием направления рядов
+      // Рендеринг сетки 9x8 (72 клетки) с анимацией перемещения фигурки
 <div style={boardStyles}>
   {[...Array(8)].map((_, rowIndex) => ( // 8 рядов
     <div key={rowIndex} style={{ display: 'contents' }}>
       {cells
         .slice(rowIndex * 9, (rowIndex + 1) * 9) // По 9 клеток в ряду
         .map((cell, cellIndex) => {
-          const isPlayerHere = currentPosition === cell.id;
-          const isSnake = transitions[cell.id] && transitions[cell.id] < cell.id;
-          const isLadder = transitions[cell.id] && transitions[cell.id] > cell.id;
+          const isPlayerHere = currentPosition === cell.id; // Подсветка текущей позиции игрока
+          const isSnake = transitions[cell.id] && transitions[cell.id] < cell.id; // Змея (переход вниз)
+          const isLadder = transitions[cell.id] && transitions[cell.id] > cell.id; // Стрела (переход вверх)
           const isSpecialCell = [1, 68, 72].includes(cell.id); // "Рождение" (1), "Космическое сознание" (68), "Земля" (72)
 
           // Чередование направления: четные ряды (0, 2, 4, 6) слева направо, нечетные (1, 3, 5, 7) справа налево
@@ -261,14 +290,19 @@ const cellStyles: React.CSSProperties = {
               key={cell.id}
               style={{
                 ...cellStyles,
-                backgroundColor: currentPosition === cell.id ? '#ffd700' : 'rgba(255, 255, 255, 0.8)',
+                backgroundColor: playerPath.includes(cell.id) ? '#ffd700' : 'rgba(255, 255, 255, 0.8)', // Подсветка пути игрока
                 gridColumn: cellOrder + 1, // Устанавливаем позицию в столбце
               }}
               className={`cell ${isPlayerHere ? 'player' : ''} ${isSnake ? 'snake' : ''} ${isLadder ? 'ladder' : ''} ${isSpecialCell ? 'special' : ''}`}
             >
               <span className="cell-number">{cell.id}</span>
               {isPlayerHere && (
-                <img src="/images/player.png" alt="Player" className="cell-icon player-icon" style={{ width: '40px', height: '40px' }} />
+                <img
+                  src="/images/player.png"
+                  alt="Player"
+                  className={`cell-icon player-icon ${isMoving ? 'moving' : ''}`} // Добавляем класс для анимации
+                  style={{ width: '40px', height: '40px', transition: 'transform 0.5s ease-in-out' }} // Плавный переход
+                />
               )}
               {isSnake && (
                 <img src="/images/snake.png" alt="Snake" className="cell-icon snake-icon" style={{ width: '40px', height: '40px' }} />
