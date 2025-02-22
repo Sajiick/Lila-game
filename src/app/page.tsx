@@ -306,19 +306,19 @@ const cellStyles: React.CSSProperties = {
                 />
               )}
               {isSnake && (
-                <img src="/images/snake.png" alt="Snake" className="cell-icon snake-icon" style={{ width: '40px', height: '40px' }} />
+                <img src="/images/snake.png" alt="Snake" className="cell-icon snake-icon" style={{ width: '50px', height: '50px' }} />
               )}
               {isLadder && (
-                <img src="/images/ladder.png" alt="Ladder" className="cell-icon ladder-icon" style={{ width: '40px', height: '40px' }} />
+                <img src="/images/ladder.png" alt="Ladder" className="cell-icon ladder-icon" style={{ width: '70px', height: '70px' }} />
               )}
               {isSpecialCell && cell.id === 1 && (
-                <img src="/images/birth.png" alt="Birth" className="cell-icon special-icon" style={{ width: '40px', height: '40px' }} />
+                <img src="/images/birth.png" alt="Birth" className="cell-icon special-icon" style={{ width: '50px', height: '50px' }} />
               )}
               {isSpecialCell && cell.id === 68 && (
-                <img src="/images/cosmic.png" alt="Cosmic" className="cell-icon special-icon" style={{ width: '40px', height: '40px' }} />
+                <img src="/images/cosmic.png" alt="Cosmic" className="cell-icon special-icon" style={{ width: '50px', height: '50px' }} />
               )}
               {isSpecialCell && cell.id === 72 && (
-                <img src="/images/earth.png" alt="Earth" className="cell-icon special-icon" style={{ width: '40px', height: '40px' }} />
+                <img src="/images/earth.png" alt="Earth" className="cell-icon special-icon" style={{ width: '50px', height: '50px' }} />
               )}
             </div>
           );
