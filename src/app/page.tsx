@@ -78,258 +78,229 @@ const cells = [
   { id: 70, name: "План гармонии", description: "Баланс между телом, умом и душой.", practice: "Медитация на равновесие." },
   { id: 71, name: "План сознания", description: "Осознание единства со всем сущим.", practice: "Медитация на единство." },
   { id: 72, name: "Космическое сознание", description: "Полное единство с вселенной.", practice: "Медитация на космическое единство." },
-  { id: 73, name: "План истины", description: "Осознание абсолютной истины.", practice: "Практика честности с собой и миром." },
-  { id: 74, name: "План освобождения", description: "Свобода от всех ограничений.", practice: "Практика отпускания всех привязанностей." },
-  { id: 75, name: "План реальности", description: "Осознание текущего момента как единственной истины.", practice: "Практика осознанности." },
-  { id: 76, name: "План блаженства", description: "Состояние внутреннего счастья и покоя.", practice: "Практика благодарности за каждый момент." },
-  { id: 77, name: "План духовности", description: "Связь с высшими силами и вселенной.", practice: "Молитва или медитация на связь с душой." },
-  { id: 78, name: "План гармонии", description: "Баланс между всеми аспектами бытия.", practice: "Медитация на внутреннюю гармонию." },
-  { id: 79, name: "План сознания", description: "Осознание себя как части вселенной.", practice: "Медитация на единство с миром." },
-  { id: 80, name: "План любви", description: "Безусловная любовь ко всему сущему.", practice: "Практика отправки любви всем существам." },
-  { id: 81, name: "План знания", description: "Мудрость, ведущая к абсолютной истине.", practice: "Изучение духовных текстов." },
-  { id: 82, name: "План освобождения", description: "Свобода от всех иллюзий и ограничений.", practice: "Практика отпускания." },
-  { id: 83, name: "План реальности", description: "Осознание истины текущего момента.", practice: "Практика осознанного присутствия." },
-  { id: 84, name: "План блаженства", description: "Состояние внутреннего покоя и радости.", practice: "Практика благодарности за жизнь." },
-  { id: 85, name: "План духовности", description: "Связь с высшим Я и вселенной.", practice: "Медитация на связь с душой." },
-  { id: 86, name: "План гармонии", description: "Баланс между телом, умом и душой.", practice: "Медитация на равновесие." },
-  { id: 87, name: "План сознания", description: "Осознание единства со всем сущим.", practice: "Медитация на единство." },
-  { id: 88, name: "План любви", description: "Безусловная любовь к себе и другим.", practice: "Практика любви и принятия." },
-  { id: 89, name: "План знания", description: "Мудрость, открывающая путь к истине.", practice: "Чтение духовной литературы." },
-  { id: 90, name: "План освобождения", description: "Свобода от иллюзий и эго.", practice: "Практика отпускания привязанностей." },
-  { id: 91, name: "План реальности", description: "Осознание текущего момента как истины.", practice: "Практика осознанности." },
-  { id: 92, name: "План блаженства", description: "Состояние внутреннего счастья.", practice: "Практика благодарности за все." },
-  { id: 93, name: "План духовности", description: "Связь с высшими силами и душой.", practice: "Молитва или медитация." },
-  { id: 94, name: "План гармонии", description: "Баланс во всех аспектах жизни.", practice: "Медитация на внутреннюю гармонию." },
-  { id: 95, name: "План сознания", description: "Осознание себя как части целого.", practice: "Медитация на единство с миром." },
-  { id: 96, name: "План любви", description: "Безусловная любовь ко всему сущему.", practice: "Практика отправки любви всем существам." },
-  { id: 97, name: "План знания", description: "Мудрость, ведущая к абсолютной истине.", practice: "Изучение духовных текстов." },
-  { id: 98, name: "План освобождения", description: "Свобода от всех иллюзий и ограничений.", practice: "Практика отпускания." },
-  { id: 99, name: "План реальности", description: "Осознание истины текущего момента.", practice: "Практика осознанного присутствия." },
-  { id: 100, name: "Космическое сознание", description: "Полное единство с вселенной и высшим Я.", practice: "Медитация на космическое единство." },
+
 ];
 
 
-// Змеи и лестницы (переходы) с индексной сигнатурой
+// Змеи и стрелы (переходы) с индексной сигнатурой
 const transitions: { [key: number]: number } = {
-  // Лестницы (перемещение вверх)
-  4: 14,   // Лестница: с 4 на 14
-  9: 31,   // Лестница: с 9 на 31
-  21: 42,  // Лестница: с 21 на 42
-  28: 84,  // Лестница: с 28 на 84 
-  36: 44,  // Лестница: с 36 на 44
-  51: 67,  // Лестница: с 51 на 67
-  71: 91,  // Лестница: с 71 на 91 
-  80: 100,  // Лестница: с 80 на 100 
+  // стрелы(перемещение вверх)
+  10: 23,   // Стрела: с 4 на 14
+  17: 69,   // Стрела: с 9 на 31
+  20: 32,  // Стрела: с 21 на 42
+  22: 60,  // Лестница: с 28 на 84 
+  27: 41,  // Лестница: с 36 на 44
+  28: 50,  // Лестница: с 51 на 67
+  37: 66,  // Лестница: с 71 на 91 
+  46: 62,  // Лестница: с 80 на 100 
+  54: 68,
 
   // Змеи (перемещение вниз)
-  17: 7,   // Змея: с 17 на 7
-  54: 34,  // Змея: с 54 на 34
-  62: 19,  // Змея: с 62 на 19
-  64: 60,  // Змея: с 64 на 60
-  87: 24,  // Змея: с 87 на 24 
-  93: 73,  // Змея: с 93 на 73 
-  95: 75,  // Змея: с 95 на 75 
-  98: 79,  // Змея: с 98 на 79 
+  12: 8,   // Змея: с 17 на 7
+  24: 7,  // Змея: с 54 на 34
+  29: 6,  // Змея: с 62 на 19
+  44: 9,  // Змея: с 64 на 60
+  52: 35,  // Змея: с 87 на 24 
+  55: 3,  // Змея: с 93 на 73 
+  61: 13,  // Змея: с 95 на 75 
+  63: 2,  // Змея: с 98 на 79 
+  72: 51,
 
 };
 export default function Home() {
-  const [currentPosition, setCurrentPosition] = useState(1); // Начальная позиция игрока (клетка 1)
-  const [diceValue, setDiceValue] = useState(0);
-  const [currentCell, setCurrentCell] = useState(cells[0]);
-  const [moveHistory, setMoveHistory] = useState<{ cellId: number; cellName: string }[]>([]);
-  
+// Состояние для игры: начальная позиция на клетке 68, ожидание "Рождения" (выброс 6)
+const [currentPosition, setCurrentPosition] = useState(68); // Начальная позиция на клетке 68
+const [diceValue, setDiceValue] = useState(0);
+const [currentCell, setCurrentCell] = useState(cells.find((cell) => cell.id === 68) || cells[0]);
+const [moveHistory, setMoveHistory] = useState<{ cellId: number; cellName: string }[]>([]);
+const [gameOver, setGameOver] = useState(false);
+const [isBorn, setIsBorn] = useState(false); // Флаг "Рождения" (игрок еще не родился)
+const [birthAttempts, setBirthAttempts] = useState(0); // Количество попыток выбросить 6
+const [request, setRequest] = useState(""); // Запрос игрока (можно добавить поле ввода)
 
-  const HomePage = () => {
-    const [dice, setDice] = useState(1);
-    const [position, setPosition] = useState(1); // Начальная позиция 1
-    const [gameOver, setGameOver] = useState(false);
-    const totalCells = 100;
+  // Функция броска кубика с учетом правил "Рождения" и завершения игры
+const rollDice = () => {
+  if (gameOver) return;
 
+  const dice = Math.floor(Math.random() * 6) + 1;
+  setDiceValue(dice);
 
-    const rollDice = () => {
-      if (gameOver) return; // Если игра окончена, не даем бросать кубик
-
-      const dice = Math.floor(Math.random() * 6) + 1;
-      setDiceValue(dice);
-      const newPosition = Math.min(currentPosition + dice, cells.length);
-      setCurrentPosition(newPosition); // Обновляем текущую позицию
-      const newCell = cells.find((cell) => cell.id === newPosition) || cells[0];
-      setCurrentCell(newCell);
-      setMoveHistory([...moveHistory, { cellId: newCell.id, cellName: newCell.name }]);
-      // Проверяем, достиг ли игрок последней клетки
-    if (newPosition === cells.length) {
-      setGameOver(true); // Устанавливаем gameOver в true
+  // Если игрок еще не родился (на клетке 68), нужно выбросить 6
+  if (!isBorn) {
+    setBirthAttempts(birthAttempts + 1);
+    if (dice !== 6) {
+      // Не выбросили 6, остаемся на клетке 68
+      setMoveHistory([...moveHistory, { cellId: 68, cellName: "Космическое сознание (ожидание рождения)" }]);
+      return;
     }
-      const result = Math.floor(Math.random() * 6) + 1;
-      setDice(result);
-      movePlayer(result);
-    };
+    // Выбросили 6, "Рождение" произошло, перемещаемся на клетку 1, затем на 6
+    setIsBorn(true);
+    setCurrentPosition(1);
+    const birthCell = cells.find((cell) => cell.id === 1) || cells[0];
+    setCurrentCell(birthCell);
+    setMoveHistory([...moveHistory, { cellId: 1, cellName: birthCell.name }]);
+    // Сразу перемещаемся на клетку 6 (Иллюзия)
+    setTimeout(() => {
+      setCurrentPosition(6);
+      const illusionCell = cells.find((cell) => cell.id === 6) || cells[0];
+      setCurrentCell(illusionCell);
+      setMoveHistory((prev) => [...prev, { cellId: 6, cellName: illusionCell.name }]);
+    }, 500); // Задержка для отображения перехода
+    return;
+  }
 
-    const movePlayer = (steps: number) => {
-      setPosition((prev) => {
-        let newPosition = prev + steps;
+  // Игрок уже родился, обычный ход
+  let newPosition = currentPosition + dice;
+  // Проверяем, не превышает ли позиция 72
+  if (newPosition > 72) {
+    // Если выпало больше, чем нужно для достижения 68, игрок остается на месте
+    if (currentPosition < 68 && newPosition > 68) {
+      newPosition = currentPosition; // Остаемся на месте, если пропустили 68
+    } else if (newPosition > 72) {
+      newPosition = currentPosition; // Остаемся на месте, если больше 72
+    }
+  }
 
-        // Проверяем, не превышает ли позиция максимальное значение
-        if (newPosition > totalCells) {
-          newPosition = totalCells;
-        }
+  // Проверяем переходы (змеи и стрелы)
+  if (transitions[newPosition]) {
+    newPosition = transitions[newPosition];
+  }
 
-        // Проверяем переходы (змеи и лестницы)
-        if (transitions[newPosition]) {
-          newPosition = transitions[newPosition];
-        }
+  setCurrentPosition(newPosition);
+  const newCell = cells.find((cell) => cell.id === newPosition) || cells[0];
+  setCurrentCell(newCell);
+  setMoveHistory([...moveHistory, { cellId: newCell.id, cellName: newCell.name }]);
 
-        // Проверяем, достиг ли игрок конца игры
-        if (newPosition === totalCells) {
-          setGameOver(true);
-        }
+  // Проверяем завершение игры
+  if (newPosition === 68) {
+    setGameOver(true);
+  }
+};
 
-        return newPosition;
-      });
-    };
+// Стили для сетки 9x8 (9 столбцов, 8 рядов), размер клеток 100x100px
+// Стили для сетки 9x8 (9 столбцов, 8 рядов), размер клеток 100x100px
+const boardStyles: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(9, 100px)', // 9 столбцов по 100px
+  gridTemplateRows: 'repeat(8, 100px)', // 8 рядов по 100px
+  gap: '5px',
+  justifyContent: 'center',
+  margin: '20px auto',
+  minWidth: '920px', // 9 * 100px + отступы
+  minHeight: '820px', // 8 * 100px + отступы
+  backgroundImage: 'url("/images/background.jpg")',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  gridAutoFlow: 'row dense', // Заполнение строк снизу вверх
+};
 
-    // Получаем информацию о текущей клетке
-    const currentCell = cells.find((cell) => cell.id === position) || {
-      id: position,
-      name: "Неизвестная клетка",
-      description: "Описание отсутствует.",
-      practice: "Практика отсутствует.",
-    };
-    const renderGameBoard = () => {
-      const board = [];
-      for (let row = 9; row >= 0; row--) {
-        const rowCells = [];
-        for (let col = 0; col < 10; col++) {
-          const cellNumber = row % 2 === 0
-            ? (row * 10) + col + 1
-            : (row * 10) + (10 - col);
-          const isPlayerHere = position === cellNumber;
-          const isSnake = Object.keys(transitions).includes(cellNumber.toString()) && transitions[cellNumber] < cellNumber;
-          const isLadder = Object.keys(transitions).includes(cellNumber.toString()) && transitions[cellNumber] > cellNumber;
-          const isSpecialCell = [1, 100].includes(cellNumber); // Пример особых клеток (Рождение и Космическое сознание)
+  // Стили для клеток размером 100x100px
+const cellStyles: React.CSSProperties = {
+  width: '100px',
+  height: '100px',
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  border: '1px solid #999',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontSize: '28px', // Увеличиваем шрифт для читаемости
+  cursor: 'pointer',
+  position: 'relative', // Для позиционирования иконок
+};
+  return (
+    // Поле для ввода запроса игрока перед началом игры
+<div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+  {!isBorn && (
+    <div className="mb-4">
+      <label htmlFor="request" className="block text-lg font-semibold mb-2">
+        Введите ваш запрос для игры:
+      </label>
+      <input
+        id="request"
+        type="text"
+        value={request}
+        onChange={(e) => setRequest(e.target.value)}
+        className="border p-2 rounded w-64"
+        placeholder="Ваш запрос..."
+      />
+    </div>
+  )}
+      <h1 className="text-4xl font-bold mb-8">Игра Лила</h1>
+      // Рендеринг сетки 8x9 (72 клетки) с иконками, подсветкой текущей позиции и особыми клетками
+      // Рендеринг сетки 9x8 (72 клетки) с чередованием направления рядов
+<div style={boardStyles}>
+  {[...Array(8)].map((_, rowIndex) => ( // 8 рядов
+    <div key={rowIndex} style={{ display: 'contents' }}>
+      {cells
+        .slice(rowIndex * 9, (rowIndex + 1) * 9) // По 9 клеток в ряду
+        .map((cell, cellIndex) => {
+          const isPlayerHere = currentPosition === cell.id;
+          const isSnake = transitions[cell.id] && transitions[cell.id] < cell.id;
+          const isLadder = transitions[cell.id] && transitions[cell.id] > cell.id;
+          const isSpecialCell = [1, 68, 72].includes(cell.id); // "Рождение" (1), "Космическое сознание" (68), "Земля" (72)
 
-          rowCells.push(
+          // Чередование направления: четные ряды (0, 2, 4, 6) слева направо, нечетные (1, 3, 5, 7) справа налево
+          const isEvenRow = rowIndex % 2 === 0;
+          const cellOrder = isEvenRow ? cellIndex : 8 - cellIndex; // Инвертируем порядок для нечетных рядов
+
+          return (
             <div
-              key={cellNumber}
+              key={cell.id}
+              style={{
+                ...cellStyles,
+                backgroundColor: currentPosition === cell.id ? '#ffd700' : 'rgba(255, 255, 255, 0.8)',
+                gridColumn: cellOrder + 1, // Устанавливаем позицию в столбце
+              }}
               className={`cell ${isPlayerHere ? 'player' : ''} ${isSnake ? 'snake' : ''} ${isLadder ? 'ladder' : ''} ${isSpecialCell ? 'special' : ''}`}
             >
-              <span className="cell-number">{cellNumber}</span>
+              <span className="cell-number">{cell.id}</span>
               {isPlayerHere && (
-                <img src="/images/player.png" alt="Player" className="cell-icon player-icon" />
+                <img src="/images/player.png" alt="Player" className="cell-icon player-icon" style={{ width: '40px', height: '40px' }} />
               )}
               {isSnake && (
-                <img src="/images/snake.png" alt="Snake" className="cell-icon snake-icon" />
+                <img src="/images/snake.png" alt="Snake" className="cell-icon snake-icon" style={{ width: '40px', height: '40px' }} />
               )}
               {isLadder && (
-                <img src="/images/ladder.png" alt="Ladder" className="cell-icon ladder-icon" />
+                <img src="/images/ladder.png" alt="Ladder" className="cell-icon ladder-icon" style={{ width: '40px', height: '40px' }} />
               )}
-              {isSpecialCell && cellNumber === 1 && (
-                <img src="/images/birth.png" alt="Birth" className="cell-icon special-icon" />
+              {isSpecialCell && cell.id === 1 && (
+                <img src="/images/birth.png" alt="Birth" className="cell-icon special-icon" style={{ width: '40px', height: '40px' }} />
               )}
-              {isSpecialCell && cellNumber === 100 && (
-                <img src="/images/cosmic.png" alt="Cosmic" className="cell-icon special-icon" />
+              {isSpecialCell && cell.id === 68 && (
+                <img src="/images/cosmic.png" alt="Cosmic" className="cell-icon special-icon" style={{ width: '40px', height: '40px' }} />
+              )}
+              {isSpecialCell && cell.id === 72 && (
+                <img src="/images/earth.png" alt="Earth" className="cell-icon special-icon" style={{ width: '40px', height: '40px' }} />
               )}
             </div>
           );
-        }
-        board.push(
-          <div key={row} className="row">
-            {row % 2 === 0 ? rowCells : rowCells.reverse()}
-          </div>
-        );
-      }
-      return <div className="game-board">{board}</div>;
-    };
-
-    const boardStyles: React.CSSProperties = {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(8, 50px)',
-      gap: '5px',
-      justifyContent: 'center',
-      margin: '20px auto',
-      minWidth: '420px',
-      minHeight: '420px',
-      backgroundImage: 'url("/images/background.jpg")', // Ваш фон
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-    };
-
-    const cellStyles: React.CSSProperties = {
-      width: '50px',
-      height: '50px',
-      backgroundColor: 'rgba(255, 255, 255, 0.8)', // Полупрозрачный фон для читаемости
-      border: '1px solid #999',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontSize: '14px',
-      cursor: 'pointer',
-    };
-
-    return (
-      <div className="flex flex-col items-center p-4 min-h-screen bg-gray-100">
-        <h1 className="text-xl md:text-2xl font-bold mb-4">Лила: Трансформационная Игра</h1>
-
-        {/* Игровое поле */}
-        {renderGameBoard()}
-
-        <div
-          className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-gray-200 text-xl md:text-2xl rounded-full shadow-lg mt-4"
-        >
-          {dice}
-        </div>
-
-        <p className="mt-4 text-sm md:text-base">Текущая позиция: {position}</p>
-
-        <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{currentCell.name}</h2>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">{currentCell.description}</p>
-          <div className="mt-4">
-            <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">Практика:</h3>
-            <p className="text-gray-600 dark:text-gray-400">{currentCell.practice}</p>
-          </div>
-        </div>
-
-        {/* Кубик (только для отображения) */}
-        <div
-          className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-gray-200 text-xl md:text-2xl rounded-full shadow-lg"
-        >
-          {dice}
-        </div>
-
-        {/* Информация о текущей позиции */}
-        <p className="mt-4 text-sm md:text-base">Текущая позиция: {position}</p>
-
-        {/* Информация о клетке */}
-        <div className="mt-4 p-4 bg-white rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-lg font-semibold">{currentCell.name}</h2>
-          <p className="mt-2 text-gray-600">{currentCell.description}</p>
-          <div className="mt-4">
-            <h3 className="text-md font-medium">Практика:</h3>
-            <p className="text-gray-600">{currentCell.practice}</p>
-          </div>
-        </div>
-
-        {/* Кнопка для броска кубика */}
-        <Button
-          variant="primary"
-          size="md"
-          onClick={rollDice}
-          disabled={gameOver}
-          className="mt-4"
-          aria-label="Бросить кубик"
-        >
-          {gameOver ? 'Игра окончена' : 'Бросить кубик'}
-        </Button>
-
-        {/* Уведомление о завершении игры */}
+        })}
+    </div>
+  )).reverse()} {/* Инвертируем порядок рядов для отображения снизу вверх */}
+</div>
+      <div className="mt-8 text-center">
+        <p className="text-lg">Текущая клетка: {currentCell.name}</p>
+        <p className="text-md">{currentCell.description}</p>
+        <p className="text-md">Практика: {currentCell.practice}</p>
+      </div>
+      <div className="mt-4">
+        <Button onClick={rollDice} disabled={gameOver}>Бросить кубик</Button>
+        {diceValue > 0 && <p className="mt-2">Выпало: {diceValue}</p>}
         {gameOver && (
           <p className="mt-4 text-green-500 font-semibold">Поздравляем! Вы достигли конца пути.</p>
         )}
       </div>
-  
-    );
-  };
-
-  export default HomePage;
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold">История ходов</h2>
+        <ul className="list-disc">
+          {moveHistory.map((move, index) => (
+            <li key={index}>
+              Ход {index + 1}: Клетка {move.cellId} - {move.cellName}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
