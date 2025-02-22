@@ -286,15 +286,16 @@ const cellStyles: React.CSSProperties = {
           const cellOrder = isEvenRow ? cellIndex : 8 - cellIndex; // Инвертируем порядок для нечетных рядов
 
           return (
-            <div
-              key={cell.id}
-              style={{
-                ...cellStyles,
-                backgroundColor: playerPath.includes(cell.id) ? '#ffd700' : 'rgba(255, 255, 255, 0.8)', // Подсветка пути игрока
-                gridColumn: cellOrder + 1, // Устанавливаем позицию в столбце
-              }}
-              className={`cell ${isPlayerHere ? 'player' : ''} ${isSnake ? 'snake' : ''} ${isLadder ? 'ladder' : ''} ${isSpecialCell ? 'special' : ''}`}
-            >
+<div
+  key={cell.id}
+  className={`cell cell-appear ${isPlayerHere ? 'player' : ''} ${isSnake && isMoving ? 'snake-transition' : ''} ${isLadder && isMoving ? 'ladder-transition' : ''} ${isSpecialCell ? 'special' : ''}`}
+  style={{
+    ...cellStyles,
+    backgroundColor: playerPath.includes(cell.id) ? '#ffd700' : 'rgba(255, 255, 255, 0.8)', // Подсветка пути игрока
+    gridColumn: cellOrder + 1, // Устанавливаем позицию в столбце
+    animationDelay: `${cell.id * 0.02}s` // Задержка для последовательного появления
+  }}
+>
               <span className="cell-number">{cell.id}</span>
               {isPlayerHere && (
                 <img

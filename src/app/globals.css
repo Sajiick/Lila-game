@@ -32,6 +32,13 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  animation: backgroundPulse 10s infinite ease-in-out;
+}
+
+@keyframes backgroundPulse {
+  0% { background-color: rgba(255, 255, 255, 1); } /* Белый цвет */
+  50% { background-color: rgba(200, 200, 200, 1); } /* Серый цвет */
+  100% { background-color: rgba(255, 255, 255, 1); } /* Белый цвет */
 }
 
 .row {
@@ -92,6 +99,26 @@ body {
   height: 40px;
 }
 
+/* Анимация для змей (скольжение вниз) */
+.snake-transition {
+  animation: snakeSlide 0.5s ease-in-out;
+}
+
+@keyframes snakeSlide {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(20px); }
+}
+
+/* Анимация для стрелок (взлет вверх) */
+.ladder-transition {
+  animation: ladderRise 0.5s ease-in-out;
+}
+
+@keyframes ladderRise {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
   .game-board {
@@ -149,4 +176,16 @@ body {
 .dice:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+/* Анимация появления клеток */
+.cell-appear {
+  opacity: 0;
+  transform: scale(0.8);
+  animation: appear 0.5s ease-in-out forwards;
+}
+
+@keyframes appear {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
 }
