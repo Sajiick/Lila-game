@@ -1,15 +1,18 @@
 // src/app/page.tsx
 'use client';
+
 import Head from 'next/head';
-import { useState } from 'react';
-import Button from '@/components/ui/button';
+import Image from 'next/image';
+import { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import Particles from 'react-particles';
-import { useCallback } from 'react';
-import { loadFull } from 'tsparticles'
+import type { Engine } from 'tsparticles-engine'; // Импортируем тип Engine
+import { loadSlim } from 'tsparticles-slim'; // Используем loadSlim для оптимизации
 
 
 // Создаём объект Audio для звука броска кубика
 const diceRollSound = new Audio('/audio/dice-roll.mp3');
+
 
 // Данные о клетках (можно расширить)
 const cells = [
@@ -115,6 +118,7 @@ const transitions: { [key: number]: number } = {
 
 };
 export default function Home() {
+
 // Состояние для игры: начальная позиция на клетке 68, ожидание "Рождения" (выброс 6)
 const [currentPosition, setCurrentPosition] = useState(68); // Начальная позиция на клетке 68
 const [diceValue, setDiceValue] = useState(0);
@@ -125,12 +129,15 @@ const [isBorn, setIsBorn] = useState(false); // Флаг "Рождения" (и�
 const [birthAttempts, setBirthAttempts] = useState(0); // Количество попыток выбросить 6
 const [request, setRequest] = useState(""); // Запрос игрока (можно добавить поле ввода)
 // Состояние для анимации перемещения фигурки
+const [playerPosition, setPlayerPosition] = useState(0); // Позиция игрока
 const [playerPath, setPlayerPath] = useState<number[]>([68]); // Начальная позиция на клетке 68
 const [isMoving, setIsMoving] = useState(false); // Флаг анимации перемещения
 // Состояние для анимации кубика
 const [isRolling, setIsRolling] = useState(false); // Флаг анимации
-const particlesInit = useCallback(async (engine) => {
-  await loadFull(engine);
+
+// Инициализация частиц
+const particlesInit = useCallback(async (engine: Engine) => {
+  await loadSlim(engine); // Используем loadSlim для меньшего размера бандла
 }, []);
 
 // Функция броска кубика с анимацией
@@ -143,10 +150,10 @@ diceRollSound.play().catch((error) => {
 });
   // Запускаем анимацию кубика
   setIsRolling(true);
-
-  // Имитация задержки для анимации кубика (1 секунда)
+ 
+// Имитация задержки для анимации кубика (1 секунда)
   setTimeout(() => {
-    const dice = Math.floor(Math.random() * 6) + 1;
+const dice = Math.floor(Math.random() * 6) + 1;
     setDiceValue(dice);
 
     // Если игрок еще не родился (на клетке 68), нужно выбросить 6
@@ -158,7 +165,7 @@ diceRollSound.play().catch((error) => {
         setIsRolling(false);
         return;
       }
-      // Выбросили 6, "Рождение" произошло, перемещаемся на клетку 1, затем на 6
+// Выбросили 6, "Рождение" произошло, перемещаемся на клетку 1, затем на 6
       setIsBorn(true);
       setIsMoving(true); // Запускаем анимацию перемещения
       setPlayerPath([68, 1]); // Путь от 68 к 1
@@ -195,12 +202,32 @@ diceRollSound.play().catch((error) => {
         newPosition = currentPosition; // Остаемся на месте, если больше 72
       }
     }
+    const movePlayer = (diceValue: number) => {
+      setIsMoving(true);
+      const startPosition = playerPosition;
+      const endPosition = Math.min(playerPosition + diceValue, 72);
+      const path = [];
+  
+      // Заполняем путь клетками, по которым проходит игрок
+      for (let i = startPosition + 1; i <= endPosition; i++) {
+        path.push(i);
+      }
+  
+      setPlayerPath(path); // Устанавливаем путь
+      setPlayerPosition(endPosition);
+  
+      // Сбрасываем анимацию и путь через 2 секунды
+      setTimeout(() => {
+        setIsMoving(false);
+        setPlayerPath([]);
+      }, 2000);
+    };
 
-    // Проверяем переходы (змеи и стрелы)
-    const finalPosition = transitions[newPosition] || newPosition;
+// Проверяем переходы (змеи и стрелы)
+const finalPosition = transitions[newPosition] || newPosition;
 
-    // Создаем путь для анимации (промежуточные клетки)
-    const path = [];
+// Создаем путь для анимации (промежуточные клетки)
+const path = [];
     for (let i = currentPosition; i <= finalPosition; i++) {
       path.push(i);
     }
@@ -211,7 +238,8 @@ diceRollSound.play().catch((error) => {
     setIsMoving(true); // Запускаем анимацию перемещения
     setPlayerPath(path); // Устанавливаем путь для анимации
 
-    // Перемещаем фигурку по пути с задержкой
+
+// Перемещаем фигурку по пути с задержкой
     path.forEach((position, index) => {
       setTimeout(() => {
         setCurrentPosition(position);
@@ -273,7 +301,7 @@ const cellStyles: React.CSSProperties = {
         id="tsparticles"
         init={particlesInit}
         options={{
-          background: { color: { value: "#0d47a1" } },
+          background: { color: { value: "transparent" } }, // Прозрачный фон для частиц
           particles: {
             number: { value: 80, density: { enable: true, value_area: 800 } },
             color: { value: "#ffffff" },
@@ -330,27 +358,28 @@ const cellStyles: React.CSSProperties = {
 >
               <span className="cell-number">{cell.id}</span>
               {isPlayerHere && (
-                <img
+                <Image
                   src="/images/player.png"
                   alt="Player"
-                  className={`cell-icon player-icon ${isMoving ? 'moving' : ''}`} // Добавляем класс для анимации
-                  style={{ width: '40px', height: '40px', transition: 'transform 0.5s ease-in-out' }} // Плавный переход
+                  className={`cell-icon player-icon ${isMoving ? 'moving' : ''}`}
+                  width={50}
+                  height={50}
                 />
               )}
               {isSnake && (
-                <img src="/images/snake.png" alt="Snake" className="cell-icon snake-icon" style={{ width: '50px', height: '50px' }} />
+                <Image src="/images/snake.png" alt="Snake" className="cell-icon snake-icon" width={50} height={50} />
               )}
               {isLadder && (
-                <img src="/images/ladder.png" alt="Ladder" className="cell-icon ladder-icon" style={{ width: '70px', height: '70px' }} />
+                <Image src="/images/ladder.png" alt="Ladder" className="cell-icon ladder-icon" width={50} height={50} />
               )}
               {isSpecialCell && cell.id === 1 && (
-                <img src="/images/birth.png" alt="Birth" className="cell-icon special-icon" style={{ width: '50px', height: '50px' }} />
+                <Image src="/images/birth.png" alt="Birth" className="cell-icon special-icon" width={50} height={50} />
               )}
               {isSpecialCell && cell.id === 68 && (
-                <img src="/images/cosmic.png" alt="Cosmic" className="cell-icon special-icon" style={{ width: '50px', height: '50px' }} />
+                <Image src="/images/cosmic.png" alt="Cosmic" className="cell-icon special-icon" width={70} height={70} />
               )}
               {isSpecialCell && cell.id === 72 && (
-                <img src="/images/earth.png" alt="Earth" className="cell-icon special-icon" style={{ width: '50px', height: '50px' }} />
+                <Image src="/images/earth.png" alt="Earth" className="cell-icon special-icon" width={50} height={50} />
               )}
             </div>
           );
@@ -379,6 +408,7 @@ const cellStyles: React.CSSProperties = {
     }}
     title={gameOver ? "Игра окончена" : "Бросить кубик"}
   />
+  
   {diceValue > 0 && !isRolling && <p className="mt-2 text-lg">Выпало: {diceValue}</p>}
   {gameOver && (
     <p className="mt-4 text-green-500 font-semibold">Поздравляем! Вы достигли конца пути.</p>
@@ -397,4 +427,3 @@ const cellStyles: React.CSSProperties = {
     </div>
     </>
   );
-}

@@ -1,6 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Адаптивность */
+@media (max-width: 768px) {
+  .game-board {
+    max-width: 400px;
+  }
+}
+@media (max-width: 480px) {
+  .game-board {
+    max-width: 300px;
+  }
+}
+@keyframes appear {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
 
 :root {
   --background: #ffffff;
@@ -12,6 +27,15 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+.background {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: -1; /* Фон ниже всех элементов */
 }
 
 body {
@@ -28,8 +52,8 @@ body {
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(8, 50px);
-  gap: 5px;
+  grid-template-columns: repeat(8, 120px);
+  gap: 10px;
   justify-content: center;
   margin: 20px auto;
   min-width: 420px;
@@ -57,7 +81,14 @@ body {
   transition: transform 0.5s ease-in-out; /* Плавный переход для анимации */
   transform: translate(0, 0); /* Начальная позиция */
 }
-
+.moving {
+  animation: movePlayer 0.5s ease-in-out;
+}
+@keyframes movePlayer {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
 /* Убедитесь, что предыдущие стили для .cell и .cell-icon корректны */
 .cell {
   position: relative;
@@ -66,8 +97,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px;
+  font-size: 0.6rem;
   border: 1px solid #999;
+  background: linear-gradient(135deg, #ffffff, #f0f0f0); /* Градиентный фон */
+  border-radius: 10px; /* Закруглённые углы */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Мягкая тень */
+  flex-direction: column;
+  padding: 10px;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Стили для числового обозначения клеток */
@@ -75,13 +112,48 @@ body {
   position: absolute;
   z-index: 1;
   color: #333333; /* Темно-графитовый цвет для лучшей видимости */
+  top: 5px;
+  left: 5px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .cell-icon {
   position: absolute;
-  width: 40px;
-  height: 40px;
-  z-index: 2;
+  width: 50px;
+  height: 50px;
+  z-index: 2; 
+}
+
+.cell-content {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+}
+
+.cell-content h3 {
+  font-size: 14px;
+  margin: 5px 0;
+  color: #333;
+}
+
+.cell-content p {
+  margin: 2px 0;
+  line-height: 1.2;
+}
+
+.cell.active {
+  background-color: #ffeb3b; /* Жёлтый фон для активной клетки */
+  box-shadow: 0 0 10px rgba(255, 235, 59, 0.8); /* Тень для подсветки */
+  transform: scale(1.05); /* Лёгкое увеличение */
+  transition: all 0.3s ease-in-out; /* Плавный переход */
+}
+
+/* Анимация появления клеток */
+.cell-appear {
+  opacity: 0;
+  transform: scale(0.8);
+  animation: appear 0.5s ease-in-out forwards;
 }
 
 .player {
@@ -101,8 +173,21 @@ body {
 }
 
 .player-icon, .snake-icon, .ladder-icon, .special-icon {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
+  transition: transform 0.5s ease-in-out;
+}
+.special-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 5; /* Убедитесь, что иконки выше игрока */
+}
+
+.player-icon {
+  position: absolute;
+  z-index: 10; /* Игрок выше специальных иконок */
+  transition: transform 0.5s ease-in-out;
 }
 
 /* Анимация для змей (скольжение вниз) */
@@ -125,40 +210,11 @@ body {
   100% { transform: translateY(-20px); }
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-  .game-board {
-    max-width: 400px;
-  }
-
-  .cell {
-    font-size: 0.6rem;
-  }
-
-  .cell-icon {
-    width: 15px;
-    height: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .game-board {
-    max-width: 300px;
-  }
-
-  .cell {
-    font-size: 0.5rem;
-  }
-
-  .cell-icon {
-    width: 10px;
-    height: 10px;
-  }
-}
 /* Стили для кубика */
 .dice {
   width: 100px;
   height: 100px;
+  margin: 20px auto;
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -182,16 +238,4 @@ body {
 .dice:disabled {
   cursor: not-allowed;
   opacity: 0.5;
-}
-
-/* Анимация появления клеток */
-.cell-appear {
-  opacity: 0;
-  transform: scale(0.8);
-  animation: appear 0.5s ease-in-out forwards;
-}
-
-@keyframes appear {
-  0% { opacity: 0; transform: scale(0.8); }
-  100% { opacity: 1; transform: scale(1); }
 }
