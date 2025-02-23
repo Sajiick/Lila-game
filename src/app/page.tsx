@@ -1,8 +1,15 @@
 // src/app/page.tsx
 'use client';
-
+import Head from 'next/head';
 import { useState } from 'react';
 import Button from '@/components/ui/button';
+import Particles from 'react-particles';
+import { useCallback } from 'react';
+import { loadFull } from 'tsparticles'
+
+
+// Создаём объект Audio для звука броска кубика
+const diceRollSound = new Audio('/audio/dice-roll.mp3');
 
 // Данные о клетках (можно расширить)
 const cells = [
@@ -122,12 +129,18 @@ const [playerPath, setPlayerPath] = useState<number[]>([68]); // Начальн�
 const [isMoving, setIsMoving] = useState(false); // Флаг анимации перемещения
 // Состояние для анимации кубика
 const [isRolling, setIsRolling] = useState(false); // Флаг анимации
+const particlesInit = useCallback(async (engine) => {
+  await loadFull(engine);
+}, []);
 
 // Функция броска кубика с анимацией
 // Функция броска кубика с анимацией и плавным перемещением фигурки
 const rollDice = () => {
   if (gameOver) return;
-
+// Воспроизводим звук
+diceRollSound.play().catch((error) => {
+  console.error('Ошибка воспроизведения звука:', error);
+});
   // Запускаем анимацию кубика
   setIsRolling(true);
 
@@ -250,7 +263,27 @@ const cellStyles: React.CSSProperties = {
   position: 'relative', // Для позиционирования иконок
 };
   return (
-    // Поле для ввода запроса игрока перед началом игры
+    <>
+      <Head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Лила - Трансформационная игра</title>
+      </Head>
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={{
+          background: { color: { value: "#0d47a1" } },
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#ffffff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5 },
+            size: { value: 3 },
+            move: { enable: true, speed: 2 },
+          },
+        }}
+      />
 <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
   {!isBorn && (
     <div className="mb-4">
@@ -268,8 +301,7 @@ const cellStyles: React.CSSProperties = {
     </div>
   )}
       <h1 className="text-4xl font-bold mb-8">Игра Лила</h1>
-      // Рендеринг сетки 8x9 (72 клетки) с иконками, подсветкой текущей позиции и особыми клетками
-      // Рендеринг сетки 9x8 (72 клетки) с анимацией перемещения фигурки
+
 <div style={boardStyles}>
   {[...Array(8)].map((_, rowIndex) => ( // 8 рядов
     <div key={rowIndex} style={{ display: 'contents' }}>
@@ -331,7 +363,7 @@ const cellStyles: React.CSSProperties = {
         <p className="text-md">{currentCell.description}</p>
         <p className="text-md">Практика: {currentCell.practice}</p>
       </div>
-      // Рендеринг кнопки и кубика с анимацией
+
       <div className="mt-4 flex flex-col items-center">
   <div
     className={`dice ${isRolling ? 'rolling' : ''}`}
@@ -363,5 +395,6 @@ const cellStyles: React.CSSProperties = {
         </ul>
       </div>
     </div>
+    </>
   );
 }
